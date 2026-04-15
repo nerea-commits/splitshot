@@ -518,7 +518,7 @@ async function callGemini(prompt, b64) {
       generationConfig: { temperature: 0.1, maxOutputTokens: 2000 }
     })
   });
-  if (!r.ok) { const err = await r.text().catch(()=>''); if (r.status === 429) throw new Error('rate-limit'); if (r.status === 400 && err.includes('API_KEY')) throw new Error('invalid-key'); throw new Error('Gemini error ' + r.status); }
+  if (!r.ok) { const err = await r.text().catch(()=>''); console.error('Gemini API error:', r.status, err); if (r.status === 429) throw new Error('rate-limit'); if (r.status === 400 && err.includes('API_KEY')) throw new Error('invalid-key'); try { const ej = JSON.parse(err); throw new Error(ej.error?.message || 'Gemini error ' + r.status); } catch(pe) { if (pe.message.includes('Gemini')) throw pe; throw new Error('Gemini error ' + r.status + ': ' + err.slice(0, 150)); } }
   const d = await r.json();
   const text = d.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('').trim();
   if (!text) throw new Error('Respuesta vacía');
