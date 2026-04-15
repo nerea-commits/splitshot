@@ -215,50 +215,55 @@
   </nav>
 
   <div id="tab-new" class="tab-panel hidden">
-    <details class="surface-card" id="api-card">
-      <summary>🔑 Configurar IA (Gemini gratis / Claude)</summary>
-      <div style="font-size:12px;color:var(--text-muted);margin-top:8px;margin-bottom:10px;line-height:1.6;">
-        Elige qué IA lee tus tickets. <strong style="color:#A6E3A1;">Gemini es gratis</strong> — solo necesitas una cuenta de Google.
+    <!-- ONBOARDING: solo visible si no hay API key -->
+    <div id="welcome-screen" class="surface-card" style="display:none;text-align:center;padding:28px 20px;">
+      <div style="font-size:32px;margin-bottom:12px;">📸</div>
+      <div style="font-size:17px;font-weight:600;margin-bottom:6px;">¡Bienvenido a SplitShot!</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:18px;line-height:1.6;">Para que la IA pueda leer tus tickets necesitas una clave gratuita de Google. Se hace en 1 minuto.</div>
+      <div style="text-align:left;font-size:13px;color:var(--text-muted);margin-bottom:14px;line-height:1.8;padding:0 4px;">
+        <strong style="color:var(--text);">1.</strong> Abre <a href="https://aistudio.google.com/apikey" target="_blank" style="color:#5DE4C7;font-weight:500;">aistudio.google.com/apikey</a><br>
+        <strong style="color:var(--text);">2.</strong> Pulsa <strong style="color:var(--text);">"Crear clave de API"</strong><br>
+        <strong style="color:var(--text);">3.</strong> Copia la clave y pégala aquí abajo
       </div>
-      <div style="display:flex;gap:4px;background:var(--surface-2);padding:3px;border-radius:var(--radius-xs);margin-bottom:12px;">
-        <button class="provider-tab active" data-provider="gemini" style="flex:1;font-size:12px;padding:8px;border-radius:5px;border:none;cursor:pointer;font-family:inherit;font-weight:500;">✨ Gemini (gratis)</button>
-        <button class="provider-tab" data-provider="claude" style="flex:1;font-size:12px;padding:8px;border-radius:5px;border:none;cursor:pointer;font-family:inherit;font-weight:500;background:transparent;color:var(--text-muted);">Claude (premium)</button>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+        <input type="password" id="welcome-key-input" class="person-input" placeholder="Pega tu clave aquí..." style="flex:1;font-family:'Space Mono',monospace;font-size:12px;text-align:center;">
       </div>
-      <div id="gemini-setup">
-        <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;line-height:1.5;">
-          1. Ve a <a href="https://aistudio.google.com/apikey" target="_blank" style="color:#5DE4C7;">aistudio.google.com/apikey</a><br>
-          2. Pulsa "Crear clave de API"<br>
-          3. Pégala aquí abajo
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <input type="password" id="gemini-key-input" class="person-input" placeholder="AIzaSy..." style="flex:1;font-family:'Space Mono',monospace;font-size:12px;">
-          <button id="gemini-key-toggle" style="padding:8px 12px;font-size:12px;">👁</button>
-        </div>
-        <div id="gemini-key-status" style="font-size:11px;margin-top:8px;"></div>
-      </div>
-      <div id="claude-setup" style="display:none;">
-        <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;line-height:1.5;">
-          Mejor calidad, ~0,02€/ticket. Ve a <a href="https://console.anthropic.com/" target="_blank" style="color:#5DE4C7;">console.anthropic.com</a> y genera una API Key.
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <input type="password" id="claude-key-input" class="person-input" placeholder="sk-ant-api03-..." style="flex:1;font-family:'Space Mono',monospace;font-size:12px;">
-          <button id="claude-key-toggle" style="padding:8px 12px;font-size:12px;">👁</button>
-        </div>
-        <div id="claude-key-status" style="font-size:11px;margin-top:8px;"></div>
-      </div>
-    </details>
+      <div id="welcome-key-status" style="font-size:12px;min-height:20px;"></div>
+    </div>
+
     <details class="surface-card">
-      <summary>Ajustes (personas, proporción)</summary>
+      <summary>Ajustes</summary>
       <div id="people-settings" class="people-list"></div>
       <button id="add-person-btn" class="add-person-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Añadir persona</button>
+
+      <!-- API config oculto dentro de ajustes -->
+      <div style="border-top:1px solid var(--border);margin-top:14px;padding-top:14px;">
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">Motor de IA</div>
+        <div style="display:flex;gap:4px;background:var(--surface-2);padding:3px;border-radius:var(--radius-xs);margin-bottom:10px;">
+          <button class="provider-tab active" data-provider="gemini" style="flex:1;font-size:11px;padding:7px;border-radius:5px;border:none;cursor:pointer;font-family:inherit;font-weight:500;">Gemini (gratis)</button>
+          <button class="provider-tab" data-provider="claude" style="flex:1;font-size:11px;padding:7px;border-radius:5px;border:none;cursor:pointer;font-family:inherit;font-weight:500;background:transparent;color:var(--text-muted);">Claude</button>
+        </div>
+        <div id="gemini-setup">
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="password" id="gemini-key-input" class="person-input" placeholder="AIzaSy..." style="flex:1;font-family:'Space Mono',monospace;font-size:11px;">
+            <button id="gemini-key-toggle" style="padding:6px 10px;font-size:11px;">👁</button>
+          </div>
+          <div id="gemini-key-status" style="font-size:11px;margin-top:4px;"></div>
+        </div>
+        <div id="claude-setup" style="display:none;">
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="password" id="claude-key-input" class="person-input" placeholder="sk-ant-api03-..." style="flex:1;font-family:'Space Mono',monospace;font-size:11px;">
+            <button id="claude-key-toggle" style="padding:6px 10px;font-size:11px;">👁</button>
+          </div>
+          <div id="claude-key-status" style="font-size:11px;margin-top:4px;"></div>
+        </div>
+      </div>
+
       <div style="display:flex;gap:8px;margin-top:14px;">
         <button id="reset-memory" style="flex:1;font-size:12px;">Borrar memoria</button>
         <button id="reset-balance" style="flex:1;font-size:12px;">Saldar cuentas</button>
       </div>
     </details>
-    <div id="api-notice" class="status" style="background:rgba(93,228,199,0.08);border-color:rgba(93,228,199,0.2);color:#5DE4C7;cursor:pointer;display:none;" onclick="document.getElementById('api-card').open=true;">
-      🔑 Configura tu API Key gratuita de Gemini arriba para escanear tickets
-    </div>
     <div id="upload-zone" class="upload-zone">
       <input type="file" id="file" accept="image/*" capture="environment" style="display:none;">
       <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
@@ -441,7 +446,13 @@ function getKey(provider) { return localStorage.getItem('splitshot_key_' + provi
 function saveKey(provider, k) { localStorage.setItem('splitshot_key_' + provider, k); }
 function setProvider(p) { activeProvider = p; localStorage.setItem('splitshot_provider', p); updateProviderUI(); }
 
+function hasValidKey() {
+  const k = getKey(activeProvider);
+  return activeProvider === 'gemini' ? k.startsWith('AIza') : k.startsWith('sk-');
+}
+
 function updateProviderUI() {
+  // Provider tabs
   document.querySelectorAll('.provider-tab').forEach(t => {
     const isActive = t.dataset.provider === activeProvider;
     t.classList.toggle('active', isActive);
@@ -451,22 +462,40 @@ function updateProviderUI() {
   });
   $('gemini-setup').style.display = activeProvider === 'gemini' ? 'block' : 'none';
   $('claude-setup').style.display = activeProvider === 'claude' ? 'block' : 'none';
-  // Gemini status
+  // Key statuses
   const gk = getKey('gemini'), gst = $('gemini-key-status');
-  if (gk && gk.startsWith('AIza')) { gst.innerHTML = '<span style="color:#A6E3A1;">✓ Clave guardada</span>'; }
-  else { gst.innerHTML = gk ? '<span style="color:var(--danger);">Debe empezar por AIza...</span>' : ''; }
-  // Claude status
+  if (gk && gk.startsWith('AIza')) gst.innerHTML = '<span style="color:#A6E3A1;">✓ Configurada</span>';
+  else gst.innerHTML = gk ? '<span style="color:var(--danger);">Clave inválida</span>' : '';
   const ck = getKey('claude'), cst = $('claude-key-status');
-  if (ck && ck.startsWith('sk-')) { cst.innerHTML = '<span style="color:#A6E3A1;">✓ Clave guardada</span>'; }
-  else { cst.innerHTML = ck ? '<span style="color:var(--danger);">Debe empezar por sk-...</span>' : ''; }
-  // Notice
-  const currentKey = getKey(activeProvider);
-  const valid = activeProvider === 'gemini' ? currentKey.startsWith('AIza') : currentKey.startsWith('sk-');
-  $('api-notice').style.display = (currentKey && valid) ? 'none' : 'block';
-  // Restore inputs
+  if (ck && ck.startsWith('sk-')) cst.innerHTML = '<span style="color:#A6E3A1;">✓ Configurada</span>';
+  else cst.innerHTML = ck ? '<span style="color:var(--danger);">Clave inválida</span>' : '';
+  // Sync inputs
   $('gemini-key-input').value = getKey('gemini');
   $('claude-key-input').value = getKey('claude');
+  // Welcome screen vs normal UI
+  const valid = hasValidKey();
+  $('welcome-screen').style.display = valid ? 'none' : 'block';
+  $('upload-zone').style.display = valid ? '' : 'none';
 }
+
+// Welcome screen input — auto-detect provider and save
+$('welcome-key-input').addEventListener('input', e => {
+  const v = e.target.value.trim();
+  const st = $('welcome-key-status');
+  if (v.startsWith('AIza') && v.length > 10) {
+    saveKey('gemini', v); setProvider('gemini');
+    st.innerHTML = '<span style="color:#A6E3A1;">✓ ¡Listo! Ya puedes escanear tickets</span>';
+    setTimeout(() => updateProviderUI(), 800);
+  } else if (v.startsWith('sk-') && v.length > 10) {
+    saveKey('claude', v); setProvider('claude');
+    st.innerHTML = '<span style="color:#A6E3A1;">✓ ¡Listo! Ya puedes escanear tickets</span>';
+    setTimeout(() => updateProviderUI(), 800);
+  } else if (v.length > 5) {
+    st.innerHTML = '<span style="color:var(--text-muted);">Pegando clave...</span>';
+  } else { st.innerHTML = ''; }
+});
+
+// Settings panel inputs
 document.querySelectorAll('.provider-tab').forEach(t => { t.addEventListener('click', () => setProvider(t.dataset.provider)); });
 $('gemini-key-input').addEventListener('input', e => { saveKey('gemini', e.target.value.trim()); updateProviderUI(); });
 $('claude-key-input').addEventListener('input', e => { saveKey('claude', e.target.value.trim()); updateProviderUI(); });
@@ -525,7 +554,7 @@ async function callAPI(prompt, b64) {
   return JSON.parse(j.slice(0, ei + 1));
 }
 
-async function tryAuto(){if(!Object.keys(state.memory).length)return;setStatus('Buscando productos conocidos...');try{const products=await callAPI(`Detecta cada línea de producto del ticket. Devuelve SOLO JSON:\n[{"name":"producto","price":0.00,"x":85,"y":42}]\nx=horizontal del precio, y=vertical. Ignora totales, IVA.`,gRB());if(!Array.isArray(products))return;let a=0;products.forEach(p=>{const k=state.memory[normalize(p.name)];if(k&&k!=='shared'&&state.people.find(x=>x.id===k)){const x=(p.x/100)*canvas.width,y=(p.y/100)*canvas.height;strokes.push({tool:k,size:brushSize,points:[{x:x-30,y},{x:x+30,y}]});a++;}});redraw();setStatus(a>0?`He marcado ${a} producto${a>1?'s':''} conocido${a>1?'s':''}. Marca el resto.`:'');}catch(e){setStatus(e.message==='rate-limit'?'Demasiadas peticiones. Marca a mano.':e.message==='no-api-key'?'Configura tu API Key para el auto-marcado.':'');}}
+async function tryAuto(){if(!Object.keys(state.memory).length)return;setStatus('Buscando productos conocidos...');try{const products=await callAPI(`Detecta cada línea de producto del ticket. Devuelve SOLO JSON:\n[{"name":"producto","price":0.00,"x":85,"y":42}]\nx=horizontal del precio, y=vertical. Ignora totales, IVA.`,gRB());if(!Array.isArray(products))return;let a=0;products.forEach(p=>{const k=state.memory[normalize(p.name)];if(k&&k!=='shared'&&state.people.find(x=>x.id===k)){const x=(p.x/100)*canvas.width,y=(p.y/100)*canvas.height;strokes.push({tool:k,size:brushSize,points:[{x:x-30,y},{x:x+30,y}]});a++;}});redraw();setStatus(a>0?`He marcado ${a} producto${a>1?'s':''} conocido${a>1?'s':''}. Marca el resto.`:'');}catch(e){setStatus(e.message==='rate-limit'?'Demasiadas peticiones. Marca a mano.':e.message==='no-api-key'?'':'');}}
 
 $('calculate').addEventListener('click',async()=>{if(!imageBase64)return;const btn=$('calculate');btn.disabled=true;btn.textContent='Analizando...';setStatus('Analizando productos marcados...');
 const comp=document.createElement('canvas');let cw=img.naturalWidth,ch=img.naturalHeight;if(Math.max(cw,ch)>MAX_DIM){const s=MAX_DIM/Math.max(cw,ch);cw=Math.round(cw*s);ch=Math.round(ch*s);}comp.width=cw;comp.height=ch;const cc=comp.getContext('2d');cc.drawImage(img,0,0,cw,ch);cc.drawImage(canvas,0,0,canvas.width,canvas.height,0,0,cw,ch);const cb=comp.toDataURL('image/jpeg',0.85).split(',')[1];
@@ -533,7 +562,7 @@ let cd=state.people.map((p,i)=>`- ${gC(i).hex.toUpperCase()} (${COLOR_NAMES[i]||
 let js='{\n'+state.people.map(p=>`  "${p.id}": [{"name":"x","price":0.00}]`).join(',\n')+',\n  "compartido": [{"name":"x","price":0.00}]\n}';
 const prompt=`Ticket con productos marcados con subrayador:\n${cd}\n- Sin marcar → "compartido"\n\nPara cada línea, mira si está cubierta por un color. Si hay varios, gana el de más superficie.\n\nDevuelve SOLO JSON:\n${js}\n\nPrecios en euros con punto. Ignora totales, descuentos, IVA. Nombres cortos.`;
 try{const parsed=await callAPI(prompt,cb);items=[];state.people.forEach(p=>{(parsed[p.id]||[]).forEach(it=>{items.push({id:nextId++,name:it.name||'Artículo',price:parseFloat(it.price)||0,assignedTo:p.id});});});(parsed.compartido||[]).forEach(it=>{items.push({id:nextId++,name:it.name||'Artículo',price:parseFloat(it.price)||0,assignedTo:'shared'});});if(!items.length)throw new Error('vacio');setStatus('');renderResult();}
-catch(e){if(e.message==='no-api-key'){setStatus('Configura tu API Key en los ajustes de arriba.',true);$('api-card').open=true;}else if(e.message==='invalid-key'){setStatus('API Key inválida. Revísala en los ajustes.',true);$('api-card').open=true;}else if(e.message==='rate-limit')setStatus('Demasiadas peticiones. Espera 30-60 seg.',true);else if(e.message==='vacio')setStatus('No se detectaron productos. Marca bien las líneas.',true);else setStatus('Error: '+e.message,true);}
+catch(e){if(e.message==='no-api-key'){setStatus('Configura tu clave de IA para poder escanear.',true);updateProviderUI();}else if(e.message==='invalid-key'){setStatus('Clave de IA inválida. Revísala en Ajustes.',true);}else if(e.message==='rate-limit')setStatus('Demasiadas peticiones. Espera 30-60 seg.',true);else if(e.message==='vacio')setStatus('No se detectaron productos. Marca bien las líneas.',true);else setStatus('Error: '+e.message,true);}
 finally{btn.disabled=false;btn.textContent='Recalcular';}});
 
 function computeT(){const pt={};let sh=0;state.people.forEach(p=>pt[p.id]=0);items.forEach(i=>{if(i.assignedTo==='shared')sh+=i.price;else if(pt[i.assignedTo]!==undefined)pt[i.assignedTo]+=i.price;else sh+=i.price;});const n=state.people.length;const spp=n>0?sh/n:0;const tot={};state.people.forEach(p=>{tot[p.id]={own:pt[p.id],shared:spp,total:pt[p.id]+spp};});return{tot,sh,grand:Object.values(tot).reduce((s,t)=>s+t.total,0)};}
